@@ -16,9 +16,9 @@ public class Gmail extends Email {
     private ArrayList<Date> trashDate;
     private ArrayList<String> trashSender;
     private ArrayList<String> trashMessage;
-    public Gmail(String emailId, int inboxCapacity) {
+    public Gmail(String emailId, int inboxCapacity1) {
         super(emailId);
-        this.inboxCapacity = inboxCapacity;
+        this.inboxCapacity = inboxCapacity1;
 
         this.inboxDate = new ArrayList<>();
         this.inboxSender = new ArrayList<>();
@@ -34,7 +34,7 @@ public class Gmail extends Email {
         // 1. Each mail in the inbox is distinct.
         // 2. The mails are received in non-decreasing order. This means that the date of a new mail is greater than equal to the dates of mails received already.
 
-        if(inboxDate.size() == inboxCapacity){
+        if(inboxMessage.size() >= this.inboxCapacity){
             Date oldDate = inboxDate.get(0);
             String oldMessage = inboxMessage.get(0);
             String oldSender = inboxSender.get(0);
@@ -42,10 +42,10 @@ public class Gmail extends Email {
             inboxDate.remove(0);
             inboxMessage.remove(0);
             inboxSender.remove(0);
-
+            System.out.println(oldSender+" "+oldMessage);
             trashDate.add(oldDate);
             trashMessage.add(oldMessage);
-            trashMessage.add(oldSender);
+            trashSender.add(oldSender);
         }
         inboxDate.add(date);
         inboxSender.add(sender);
@@ -56,7 +56,8 @@ public class Gmail extends Email {
         // Each message is distinct
         // If the given message is found in any mail in the inbox, move the mail to trash, else do nothing
 
-        for(int i = 0; i < inboxDate.size(); i++){
+        int index = -1;
+        for(int i = 0; i < inboxMessage.size(); i++){
             if(message.equals(inboxMessage.get(i))){
                 Date deleteDate = inboxDate.get(i);
                 String deleteSender = inboxSender.get(i);
@@ -101,7 +102,7 @@ public class Gmail extends Email {
         //find number of mails in the inbox which are received between given dates
         //It is guaranteed that start date <= end date
         int mails = 0;
-        for(int i = 0; i < inboxDate.size(); i++){
+        for(int i = 0; i < inboxMessage.size(); i++){
             Date date = inboxDate.get(i);
             if(date.compareTo(start) >= 0 && date.compareTo(end) <= 0){
                 mails++;
@@ -129,6 +130,6 @@ public class Gmail extends Email {
 
     public int getInboxCapacity() {
         // Return the maximum number of mails that can be stored in the inbox
-        return inboxCapacity;
+        return this.inboxCapacity;
     }
 }
